@@ -6,6 +6,11 @@ metadata:
 spec:
   template:
     spec:
+      env:
+        - name: SSO_DB_STRING
+          value: "host=postgres-sso-service user=postgres password=postgres dbname=sso_db sslmode=disable"
+        - name: PRODUCTS_DB_STRING
+          value: "host=postgres-products-service user=postgres password=postgres dbname=products_db sslmode=disable"
       imagePullSecrets:
       - name: ghcr-secret
       containers:
@@ -16,11 +21,6 @@ spec:
             command: ["goose", "postgres", $SSO_DB_STRING, "up"]
           - name: Migrate Products DB
             command: ["goose", "postgres", $PRODUCTS_DB_STRING, "up"]
-        env:
-        - name: SSO_DB_STRING
-          value: "host=postgres-sso-service user=postgres password=postgres dbname=sso_db sslmode=disable"
-        - name: PRODUCTS_DB_STRING
-          value: "host=postgres-products-service user=postgres password=postgres dbname=products_db sslmode=disable"
         volumeMounts:
       restartPolicy: OnFailure
   backoffLimit: 4
