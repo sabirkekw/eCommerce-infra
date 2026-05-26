@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ecommerce       # Имя твоего приложения в панели ArgoCD
+  namespace: argocd          # ArgoCD должен увидеть этот манифест в своем namespace
+spec:
+  project: default           # Используем дефолтный проект внутри ArgoCD
+  
+  # 1. ОТКУДА брать манифесты (Твой Git)
+  source:
+    repoURL: 'https://github.com/sabirkekw/eCommerce_go' # Например, https://github.com/sabirkekw/my-go-app.git
+    targetRevision: HEAD     # Из какой ветки читать (HEAD — это текущая дефолтная, например main/master)
+    path: 'k8s/base'        # Если они в корне репозитория, просто напиши '.' (точку)
+
+  # 2. КУДА деплоить (Твой кластер K3s)
+  destination:
+    server: 'https://kubernetes.default.svc' # Внутренний адрес нашего же кластера
+    namespace: ecommerce-dev       # В какой namespace кубера раскатать твои поды Go-сервера
+
+  syncPolicy:
+    automated:               # Включаем авто-синхронизацию
+      prune: true            # Если ты удалишь файл из Git, ArgoCD сам удалит его из кубера
+      selfHeal: true         # Если кто-то руками залезет в кластер и что-то сломает, ArgoCD вернет всё как в Git

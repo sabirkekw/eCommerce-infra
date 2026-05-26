@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    # УБРАЛИ certresolver, он нам тут мешает
+    traefik.ingress.kubernetes.io/router.backend-protocol: "HTTPS"
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+    - argocd.sabirkekw.dev
+    secretName: argocd-server-tls
+  rules:
+  - host: argocd.sabirkekw.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server
+            port:
+              number: 443

@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-all
+  namespace: ecommerce-dev
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: goose
+        image: ghcr.io/sabirkekw/ecommerce_go-goose:latest
+        command: ["goose"] 
+        args: ["postgres", "host=postgres-sso-service user=postgres password=postgres dbname=sso_db sslmode=disable", "-dir", "/migrations/sso-service/", "up"]
+        env:
+        - name: SSO_DB_STRING
+          value: "host=postgres-sso-service user=postgres password=postgres dbname=sso_db sslmode=disable"
+      restartPolicy: OnFailure
+  backoffLimit: 4

@@ -1,0 +1,20 @@
+---
+- name: Setup Kubernetes Cluster
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Add Nginx Ingress Helm Repo
+      command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+      changed_when: false
+
+    - name: Update Helm Repos
+      command: helm repo update
+      changed_when: false
+
+    - name: Install Nginx Ingress
+      command: >
+        helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
+        --namespace ingress-nginx --create-namespace
+        --set controller.service.type=LoadBalancer
+      register: helm_install
+      changed_when: "'status' in helm_install.stdout"

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sso-service
+  labels:
+    app: sso-service
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sso-service
+  template:
+    metadata:
+      labels:
+        app: sso-service
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: sso-service
+          image: ghcr.io/sabirkekw/ecommerce_go-sso-service:latest
+          env:
+          # Указываем имя сервиса базы данных вместо localhost
+          - name: POSTGRES_HOST  # Имя переменной должно совпадать с тем, что ждет твой код/конфиг
+            value: "postgres-sso-service"
+          - name: POSTGRES_PORT
+            value: "5432"
+          - name: POSTGRES_DB
+            value: "sso_db"
+          - name: POSTGRES_USERNAME
+            value: "postgres"
+          - name: POSTGRES_PASSWORD
+            value: "postgres"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

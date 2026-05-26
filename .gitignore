@@ -1,0 +1,7 @@
+# -- Terraform state files and sensitive variables ---
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/terraform.tfvars
+terraform/terraform.tfvars.json
+terraform/.terraform/*
+terraform/.terraform.lock.hcl

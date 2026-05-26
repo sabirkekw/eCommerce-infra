@@ -1,0 +1,3 @@
+resources:
+  - sso-service/postgres.yaml
+  - sso-service/deployment.yaml
