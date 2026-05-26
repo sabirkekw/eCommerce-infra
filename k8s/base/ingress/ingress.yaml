@@ -17,11 +17,11 @@ spec:
           service:
             name: sso-service
             port:
-              number: 80
+              number: 8081
       - path: /v1/products
         pathType: Prefix
         backend:
           service:
             name: products-service
             port:
-              number: 80
+              number: 8080
