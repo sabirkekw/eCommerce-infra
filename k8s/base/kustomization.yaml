@@ -6,3 +6,4 @@ resources:
   - products-service/deployment.yaml
   - products-service/service.yaml
   - ingress/ingress.yaml
+  - migrations/goose.yaml
