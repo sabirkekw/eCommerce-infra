@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-products-service
+  namespace: ecommerce-dev
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: postgres-products
+  clusterIP: None # Headless сервис для StatefulSet
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-products
+  namespace: ecommerce-dev
+spec:
+  serviceName: "postgres-products-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-products
+  template:
+    metadata:
+      labels:
+        app: postgres-products
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        env:
+        - name: POSTGRES_DB
+          value: "products_db"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: pg-data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: pg-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

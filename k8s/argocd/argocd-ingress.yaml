@@ -6,7 +6,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.tls: "true"
-    # УБРАЛИ certresolver, он нам тут мешает
     traefik.ingress.kubernetes.io/router.backend-protocol: "HTTPS"
 spec:
   ingressClassName: traefik

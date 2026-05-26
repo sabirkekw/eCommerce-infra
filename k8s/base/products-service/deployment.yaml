@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-service
+  labels:
+    app: products-service
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-service
+  template:
+    metadata:
+      labels:
+        app: products-service
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: products-service
+          image: ghcr.io/sabirkekw/ecommerce_go-products-service:latest
+          env:
+          - name: POSTGRES_HOST
+            value: "postgres-products-service"
+          - name: POSTGRES_PORT
+            value: "5432"
+          - name: POSTGRES_DB
+            value: "products_db"
+          - name: POSTGRES_USERNAME
+            value: "postgres"
+          - name: POSTGRES_PASSWORD
+            value: "postgres"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"

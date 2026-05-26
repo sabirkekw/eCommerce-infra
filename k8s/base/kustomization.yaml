@@ -1,3 +1,8 @@
 resources:
   - sso-service/postgres.yaml
+  - sso-service/service.yaml
   - sso-service/deployment.yaml
+  - products-service/postgres.yaml
+  - products-service/deployment.yaml
+  - products-service/service.yaml
+  - ingress/ingress.yaml
