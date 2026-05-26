@@ -4,10 +4,9 @@ metadata:
   name: ecommerce-ingress
   namespace: ecommerce-dev
   annotations:
-    kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.backend-protocol: "HTTPS"
 spec:
+  ingressClassName: traefik
   rules:
   - host: api.sabirkekw.dev
     http:
@@ -16,7 +15,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: auth-service
+            name: sso-service
             port:
               number: 80
       - path: /v1/products
